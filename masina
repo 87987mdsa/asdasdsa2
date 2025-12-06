@@ -1,92 +1,36 @@
 local Players = game:GetService("Players")
-local TeleportService = game:GetService("TeleportService")
-
 local lobbyId = 125810438250765
 local undergroundId = 93044798454681
 
-local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 local scriptLoaded = false
 
-print("🔁 SCRIPT LOADER INICIADO")
-print("📌 PlaceId actual:", game.PlaceId)
-
--- ESPERAR A LOCALPLAYER
 local player = Players.LocalPlayer
-if not player then
-    print("⏳ Esperando a LocalPlayer...")
-    repeat
-        player = Players.LocalPlayer
-        task.wait()
-    until player
+while not player do
+    player = Players.LocalPlayer
+    task.wait()
 end
-print("✅ LocalPlayer listo:", player.Name)
 
--- FUNCIÓN PRINCIPAL
-local function checkAndExecute()
-    print("🔄 checkAndExecute llamado. scriptLoaded =", scriptLoaded)
-
-    if scriptLoaded then
-        print("⛔ Ya había script cargado, saliendo.")
-        return
-    end
-
-    task.wait(3)
-    print("📌 Re-check PlaceId:", game.PlaceId)
-
+if not scriptLoaded then
+    task.wait(2)
     if game.PlaceId == lobbyId then
-        print("🏛️ LOBBY detectado, ejecutando KK...")
-        local ok, err = pcall(function()
-            local code = game:HttpGet("https://raw.githubusercontent.com/87987mdsa/asdasdsa/refs/heads/main/kk")
-            print("✅ KK descargado, longitud:", #code)
-            loadstring(code)()
-        end)
-        if ok then
-            print("✅ KK ejecutado sin errores.")
-            scriptLoaded = true
-        else
-            print("❌ ERROR ejecutando KK:", err)
-        end
-
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/87987mdsa/asdasdsa/refs/heads/main/kk"))()
+        scriptLoaded = true
     elseif game.PlaceId == undergroundId then
-        print("⛏️ UNDERGROUND detectado, ejecutando SADZ...")
-        local ok, err = pcall(function()
-            local code = game:HttpGet("https://raw.githubusercontent.com/87987mdsa/testttt/refs/heads/main/sadz")
-            print("✅ SADZ descargado, longitud:", #code)
-            loadstring(code)()
-        end)
-        if ok then
-            print("✅ SADZ ejecutado sin errores.")
-            scriptLoaded = true
-        else
-            print("❌ ERROR ejecutando SADZ:", err)
-        end
-
-    else
-        print("❓ PlaceId desconocido:", game.PlaceId)
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/87987mdsa/testttt/refs/heads/main/sadz"))()
+        scriptLoaded = true
     end
 end
 
--- PRIMERA EJECUCIÓN
-checkAndExecute()
-
--- CHARACTERADDED CON DEBUG
-player.CharacterAdded:Connect(function(char)
-    print("👤 CharacterAdded disparado para:", player.Name, "Char:", char)
+player.CharacterAdded:Connect(function()
     scriptLoaded = false
     task.wait(1)
-    checkAndExecute()
+
+    if game.PlaceId == lobbyId then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/87987mdsa/asdasdsa/refs/heads/main/kk"))()
+        scriptLoaded = true
+
+    elseif game.PlaceId == undergroundId then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/87987mdsa/testttt/refs/heads/main/sadz"))()
+        scriptLoaded = true
+    end
 end)
-
--- QUEUE_ON_TELEPORT CON DEBUG
-if queueteleport then
-    print("📦 Configurando queue_on_teleport...")
-    queueteleport([[
-        print("🔁 [QUEUE] Script loader re-ejecutándose tras teleport")
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/87987mdsa/asdasdsa2/refs/heads/main/masina'))()
-    ]])
-    print("✅ queue_on_teleport listo.")
-else
-    print("⚠️ NO hay queue_on_teleport disponible en este executor.")
-end
-
-print("🎯 Loader listo. Mira la consola F9.")
