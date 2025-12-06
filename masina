@@ -28,7 +28,7 @@ player.CharacterAdded:Connect(autoExecute)
 if queueteleport then
     queueteleport([[
 
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/87987mdsa/testttt/asdasdsa2/heads/main/main.lua'))()
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/87987mdsa/asdasdsa2/refs/heads/main/masina'))()
     ]])
 end
 
